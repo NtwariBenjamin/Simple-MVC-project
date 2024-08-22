@@ -1,28 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat</title>
 </head>
 <body>
-<form action="#" th:action="@{'/chat'}" th:object="${chatForm}" method="POST">
-  <label for="username">Username:</label>
-  <input id="username" th:field="*{username}" type="text">
-  <label for="messageText">Message Text:</label>
-  <input id="messageText" th:field="*{messageText}" type="text">
-  <label for="messageType">Message Type: </label>
-  <select id="messageType" th:field="*{messageType}">
-    <option th:each="type: ${allMessageTypes}" th:text="${type}" th:value="${type}">Say</option>
-
-  </select>
-  <input type="submit">
+<form th:object="${chatForm}" th:action="@{/chat}" method="POST">
+    <label for="messageText">Message Text:</label>
+    <input id="messageText" type="text" th:field="*{messageText}">
+    <label for="messageType">Message Type: </label>
+    <select id="messageType" th:field="*{messageType}">
+        <option
+                th:each="type : ${allMessageTypes}"
+                th:value="${type}"
+                th:text="${type}"
+        >
+            Say
+        </option>
+    </select>
+    <input id="submitMessage" type="submit">
 </form>
-<div th:each="msg: ${greetings}" >
-  <span th:text="${msg.username}">Username:</span>: <span th:text="${msg.messageText}">Hello, World!</span>
+<div th:each="chatMessage : ${chatMessages}">
+    <span th:text="${chatMessage.username}" class="chatMessageUsername">Username</span>: <span th:text="${chatMessage.messageText}" class="chatMessageText">Hello, world!</span>
 </div>
-<!--<-->
-<!--<h1 th:each="msg: ${greetings}" th:text="${msg}" th:unless="${msg.contains('Fuck You')}">-->
-<!--  Hello, homepage!</h1>-->
-
 </body>
 </html>

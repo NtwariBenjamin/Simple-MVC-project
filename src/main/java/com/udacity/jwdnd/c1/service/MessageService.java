@@ -1,53 +1,50 @@
 package com.udacity.jwdnd.c1.service;
 
+import com.udacity.jwdnd.c1.mapper.MessageMapper;
 import com.udacity.jwdnd.c1.model.ChatForm;
 import com.udacity.jwdnd.c1.model.ChatMessage;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
 public class MessageService {
-    private List<ChatMessage> messages;
+
+    private MessageMapper messageMapper;
+
+    public MessageService(MessageMapper messageMapper) {
+        this.messageMapper = messageMapper;
+    }
+
     @PostConstruct
-    public void postConstruct(){
-        System.out.println("Creating Message Service Bean");
-        this.messages=new ArrayList<>();
+    public void postConstruct() {
+        System.out.println("Creating MessageService bean");
     }
-    public void addMessage(ChatForm chatForm){
-    ChatMessage newMessage=new ChatMessage();
-    newMessage.setUsername(chatForm.getUsername());
-    switch (chatForm.getMessageType()){
-        case "Say":
-            newMessage.setMessageText(chatForm.getMessageText());
-            break;
-        case "Shout":
-            newMessage.setMessageText(chatForm.getMessageText().toUpperCase());
-            break;
-        case "Whisper":
-            newMessage.setMessageText(chatForm.getMessageText().toLowerCase());
-            break;
+
+    public void addMessage(ChatForm chatForm) {
+        ChatMessage newMessage = new ChatMessage();
+        newMessage.setUsername(chatForm.getUsername());
+        switch (chatForm.getMessageType()) {
+            case "Say":
+                newMessage.setMessageText(chatForm.getMessageText());
+                System.out.println("Say");
+                break;
+            case "Shout":
+                System.out.println(chatForm.getMessageText());
+
+                newMessage.setMessageText(chatForm.getMessageText().toUpperCase());
+                System.out.println("Shout");
+                break;
+            case "Whisper":
+                newMessage.setMessageText(chatForm.getMessageText().toLowerCase());
+                break;
+        }
+
+        messageMapper.addMessage(newMessage);
     }
-    this.messages.add(newMessage);
+
+    public List<ChatMessage> getChatMessages(String userName) {
+        return messageMapper.getAllMessages(userName);
     }
-    public List<ChatMessage> getMessages(){
-        return new ArrayList<>(this.messages);
-    }
-//    private String message;
-//    public  MessageService(String message){
-//        this.message=message;
-//    }
-//
-//    public String upperCaseMessage(){
-//        return this.message.toUpperCase();
-//    }
-//    public String lowerCaseMessage(){
-//        return this.message.toLowerCase();
-//    }
-//    @PostConstruct
-//    public void postConstruct(){
-//        System.out.println("Creating MessageService Bean");
-//    }
 }
